@@ -3,13 +3,15 @@ import CommandLineKit
 import FileKit
 import Foundation
 
+let defaultBaseName = "L"
 
 let inputPath = StringOption(shortFlag: "i", longFlag: "input", required: true, helpMessage: "Input localization.strings file")
 let outputPath = StringOption(shortFlag: "o", longFlag: "output", helpMessage: "Output file (writes to stdout if not provided)")
 let quietOption = BoolOption(shortFlag: "q", longFlag: "quiet", helpMessage: "Suppress non-error output")
+let baseNameOption = StringOption(shortFlag: "b", longFlag: "basename", helpMessage: "Top-level struct name (defaults to \(defaultBaseName)")
 
 let cli = CommandLine()
-cli.setOptions(inputPath, outputPath, quietOption)
+cli.setOptions(inputPath, outputPath, quietOption, baseNameOption)
 
 do {
     try cli.parse()
@@ -27,6 +29,7 @@ guard let inputFile = inputPath.value else {
 let input = Path(inputFile)
 let output = outputPath.value.map{ Path($0) }
 let quiet = quietOption.wasSet
+let baseName = baseNameOption.value ?? defaultBaseName
 
 let lines: [String]
 
@@ -121,10 +124,14 @@ if lastLevel > 0 {
     }
 }
 
-let dictionary = ["strings": ss]
+
+let dictionary: [String: Any] = [
+    "baseName": baseName,
+    "strings": ss
+]
 
 let template =
-"struct L {\n" +
+"struct {{ baseName }} {\n" +
 "{% for string in strings %}" +
 "{{ string.indentString }}" +
 "{% if string.closing %}}\n" +
