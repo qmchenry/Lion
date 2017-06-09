@@ -43,6 +43,19 @@ let keyPaths = lines.flatMap{ s -> String? in
     return c.count > 1 ? c[1] : nil
 }.sorted()
 
+func escape(_ string: String) -> String {
+    let reservedEscaped = ReservedWords.escapeIfNeeded(string)
+    if reservedEscaped != string {
+        return reservedEscaped
+    }
+    if !string.hasPrefix("_"), let firstScalar = string.unicodeScalars.first {
+        if !CharacterSet.letters.contains(firstScalar) {
+            return "_" + string
+        }
+    }
+    return string
+}
+
 struct S {
     let name: String
     let keyPath: String
@@ -53,7 +66,7 @@ struct S {
     let indentString: String
     
     init(name: String = "", keyPath: String = "", indent: Int, hasString: Bool = false, closing: Bool = false, leaf: Bool = false) {
-        self.name = ReservedWords.escapeIfNeeded(name)
+        self.name = escape(name)
         self.keyPath = keyPath
         self.indent = indent
         self.closing = closing
