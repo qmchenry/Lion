@@ -53,7 +53,7 @@ struct S {
     let indentString: String
     
     init(name: String = "", keyPath: String = "", indent: Int, hasString: Bool = false, closing: Bool = false, leaf: Bool = false) {
-        self.name = name
+        self.name = ReservedWords.escapeIfNeeded(name)
         self.keyPath = keyPath
         self.indent = indent
         self.closing = closing
@@ -101,10 +101,6 @@ if lastLevel > 0 {
 }
 
 let dictionary = ["strings": ss]
-
-//ss.forEach {
-//    print($0)
-//}
 
 let template =
 "struct L {\n" +
