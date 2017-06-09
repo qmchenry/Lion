@@ -59,7 +59,7 @@ struct S {
         self.closing = closing
         self.hasString = hasString
         self.leaf = leaf
-        self.indentString = String(repeating: "    ", count: indent + 1)
+        self.indentString = String(repeating: "  ", count: indent + 1)
     }
 }
 
@@ -112,11 +112,13 @@ let template =
 "{{ string.indentString }}" +
 "{% if string.closing %}}\n" +
 "{% elif string.hasString %}" +
+  "static let " +
   "{% if string.leaf %}" +
-    "static let {{ string.name }} = \"{{ string.keyPath }}\"\n" +
+    "{{ string.name }}" +
   "{% else %}" +
-    "static let rawValue = \"{{ string.keyPath }}\"\n" +
+    "rawValue" +
   "{% endif %}" +
+  " = NSLocalizedString(\"{{ string.keyPath }}\", comment: \"\")\n" +
 "{% else %}" +
 "struct {{ string.name }} {\n" +
 "{% endif %}" +
