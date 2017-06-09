@@ -68,13 +68,20 @@ var set = Set<String>()
 var lastLevel = 0
 var lastKeyPath = ""
 
+extension String {
+    var lastDottedComponentRemoved: String {
+        let separator = "."
+        let components = self.components(separatedBy: separator)
+        guard components.count > 1 else { return self }
+        return components[0..<components.count-1].joined(separator: separator)
+    }
+}
+
 keyPaths.reversed().forEach { keyPath in
     let c = keyPath.components(separatedBy: ".")
-    let isLeaf = set.isEmpty || !lastKeyPath.hasPrefix(keyPath)
-    lastKeyPath = keyPath
+    let isLeaf = set.isEmpty || !lastKeyPath.lastDottedComponentRemoved.hasPrefix(keyPath)
     
     for level in (0...c.count-1) {
-
         let a = c[0...level]
         let subKeyPath = a.joined(separator: ".")
         if set.contains(subKeyPath) && subKeyPath == keyPath {
@@ -92,6 +99,7 @@ keyPaths.reversed().forEach { keyPath in
             
         }
     }
+    lastKeyPath = keyPath
 }
 
 if lastLevel > 0 {
