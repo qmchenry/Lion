@@ -1,4 +1,5 @@
 <img src="http://qmchenry.com/lion.svg"/>
+
 # Lion
 
 <a href="https://swift.org/package-manager">
@@ -57,4 +58,40 @@ struct L {
   }
 }
 ```
+
+# Building
+
+Lion uses Swift Package Manager for builds and package accounting. To build Lion, open a terminal window, cd to the top directory of the repository, and type:
+
+```asciidoc
+swift build
+```
+
+The package manager will fetch the dependencies, their dependencies, and any great-great-dependencies. There are currently some deprecation warnings in a third-party package with Swift 3.1 that do not affect Lion's use.
+
+The exectuable exists in .build/debug/lion after building with default settings.
+
+# Usage
+
+Basic Lion use requires a Localizable.strings file identified with the `-i` command line option:
+
+```asciidoc
+.build/debug/lion -i Samples/Short.strings
+```
+
+This will generate Swift code representing the strings in the Short.strings file in the project's Samples directory and print it to the terminal. 
+
+To write directly to an output file, supply the path and filename with the `-o` option. This also provides a newness check that will prevent regenerating the output file if the input hasn't changed. 
+
+```asciidoc
+.build/debug/lion -i Samples/Short.strings -o /tmp/Lion.swift
+```
+
+These examples generate a tree of structs starting with a base of `L` by default. This yeilds short references like `L.alpha.Title.CreateNew` at the expense of some clarity. If you'd prefer a different base struct name like `Localizations` you can supply the name with the `-b` or `--basename` option:
+
+```asciidoc
+.build/debug/lion -i Samples/Short.strings -o /tmp/Lion.swift -b Localizations
+```
+
+Bonus points awarded if you use `-b 🦁`.
 
