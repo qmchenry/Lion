@@ -31,6 +31,13 @@ let output = outputPath.value.map{ Path($0) }
 let quiet = quietOption.wasSet
 let baseName = baseNameOption.value ?? defaultBaseName
 
+// Check output file existence and newness to determine if Lion should roar
+if output != nil && output!.exists && output!.modified(since: input) {
+    print("Skipping Lion conversion")
+    exit(EX_OK)
+}
+
+
 let lines: [String]
 
 do {
@@ -151,7 +158,11 @@ let template =
 
 do {
     let rendered = try GenKit.generate(dictionary, templateString: template, template: .stencil)
-    print(rendered)
+    if let output = output {
+        try TextFile(path: output).write(rendered, atomically: true)
+    } else {
+        print(rendered)
+    }
 } catch let error {
     print(error.localizedDescription)
 }
