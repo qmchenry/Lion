@@ -1,10 +1,6 @@
 <img src="http://qmchenry.com/lion.svg"/>
 
-# Lion
-
-<a href="https://swift.org/package-manager">
-  <img src="https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat" alt="Swift Package Manager" />
-</a>
+[![swiftpm](https://img.shields.io/badge/spm-compatible-brightgreen.svg?style=flat)](https://swift.org/package-manager)
 
 ### Type-safe NSLocalizedStrings for Swift projects
 
